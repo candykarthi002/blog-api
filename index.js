@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors({ origin: "https://blogsphere-app.netlify.app", credentials: true }));
+app.use(cors({ origin: ["https://blogsphere-app.netlify.app", "http://localhost:2004"], credentials: true }));
 
 // Routes Middleware
 app.use("/api/users", userRoute);
