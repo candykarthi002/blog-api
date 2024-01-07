@@ -123,16 +123,13 @@ const getUser = asyncHandler(async (req, res) => {
 const loginStatus = asyncHandler(async (req, res) => {
   const token = await req.cookies.jwt_token;
   if (!token) {
-    return res.json(false);
+    return res.json({ status: false });
   }
   const verified = jwt.verify(token, process.env.JWT_SECRET);
   if (verified) {
-    return res.json(true);
+    const { name } = await BlogUser.findById(verified.id);
+    return res.json({ status: true, username: name });
   }
-});
-
-const getBlogs = asyncHandler(async (req, res) => {
-  res.json({ msg: "All blogs" });
 });
 
 module.exports = {
@@ -141,5 +138,4 @@ module.exports = {
   logoutUser,
   getUser,
   loginStatus,
-  getBlogs,
 };
