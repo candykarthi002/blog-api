@@ -11,9 +11,20 @@ const blogSchema = mongoose.Schema(
       required: [true],
     },
     likes: {
-      type: Number,
-      default: 0,
+      type: Array,
     },
+    comments: [
+      {
+        type: new mongoose.Schema(
+          {
+            user: mongoose.Schema.ObjectId,
+            username: String,
+            content: String,
+          },
+          { timestamps: true }
+        ),
+      },
+    ],
   },
   { timestamps: true }
 );
