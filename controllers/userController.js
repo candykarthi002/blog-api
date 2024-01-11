@@ -12,7 +12,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   if (password.length < 6) {
     res.status(400);
-    throw new Error("Password musst be atleast 6 char long.");
+    throw new Error("Password must be atleast 6 char long.");
   }
   //   Check for email existence
   const userExists = await BlogUser.findOne({ email });
@@ -61,12 +61,12 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400);
-    throw new Error("Provide email and password");
+    throw new Error("fill out email and password");
   }
   const user = await BlogUser.findOne({ email });
   if (!user) {
     res.status(404);
-    throw new Error("User Not found");
+    throw new Error("Invalid email, User Not found");
   }
   // Password validation
   const passwordIsCorrect = await bcryptjs.compare(password, user.password);
@@ -120,6 +120,19 @@ const getUser = asyncHandler(async (req, res) => {
   }
 });
 
+const getUserByName = asyncHandler(async (req, res) => {
+  const user = await BlogUser.findOne({ name: req.params.name });
+  if (user) {
+    res.status(200).json({
+      msg: "User Found",
+      user: user,
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid User");
+  }
+});
+
 const loginStatus = asyncHandler(async (req, res) => {
   const token = await req.cookies.jwt_token;
   if (!token) {
@@ -127,8 +140,8 @@ const loginStatus = asyncHandler(async (req, res) => {
   }
   const verified = jwt.verify(token, process.env.JWT_SECRET);
   if (verified) {
-    const { name } = await BlogUser.findById(verified.id);
-    return res.json({ status: true, username: name });
+    const { _id, name } = await BlogUser.findById(verified.id);
+    return res.json({ status: true, id: _id, username: name });
   }
 });
 
@@ -137,5 +150,6 @@ module.exports = {
   loginUser,
   logoutUser,
   getUser,
+  getUserByName,
   loginStatus,
 };
