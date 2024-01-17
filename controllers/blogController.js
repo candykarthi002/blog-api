@@ -30,6 +30,16 @@ const getBlogByUserId = asyncHandler(async (req, res) => {
   }
 });
 
+const deleteBlog = asyncHandler(async (req, res) => {
+  await Blog.deleteOne({ _id: req.params.id })
+    .then(() => {
+      res.status(200).json({ msg: "success" });
+    })
+    .catch((err) => {
+      res.status(404).json({ blog: "No Blogs Found" });
+    });
+});
+
 const likeBlog = asyncHandler(async (req, res) => {
   const user = jwt.verify(await req.cookies.jwt_token, process.env.JWT_SECRET);
   const blog = await Blog.findById(req.params.id);
@@ -98,4 +108,5 @@ module.exports = {
   getBlogById,
   getBlogByUserId,
   commentBlog,
+  deleteBlog,
 };
