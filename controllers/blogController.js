@@ -40,6 +40,14 @@ const deleteBlog = asyncHandler(async (req, res) => {
     });
 });
 
+const deleteComment = asyncHandler(async (req, res) => {
+  const blog = await Blog.updateOne(
+    { "comments._id": req.params.id },
+    { $pull: { comments: { _id: req.params.id } } }
+  );
+  res.status(200).json({ msg: "success" });
+});
+
 const likeBlog = asyncHandler(async (req, res) => {
   const user = jwt.verify(await req.cookies.jwt_token, process.env.JWT_SECRET);
   const blog = await Blog.findById(req.params.id);
@@ -70,7 +78,7 @@ const commentBlog = asyncHandler(async (req, res) => {
     blog.save();
     res.status(200).json(blog);
   } else {
-    res.status(400).json({ msg: "Error updating like" });
+    res.status(400).json({ msg: "Error Creating comment" });
   }
   // console.log(jwt.verify(await req.cookies.jwt_token, process.env.JWT_SECRET));
   // console.log(req.params.id);
@@ -109,4 +117,5 @@ module.exports = {
   getBlogByUserId,
   commentBlog,
   deleteBlog,
+  deleteComment,
 };
