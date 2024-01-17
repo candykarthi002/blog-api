@@ -8,6 +8,7 @@ const {
   getBlogByUserId,
   commentBlog,
   deleteBlog,
+  deleteComment,
 } = require("../controllers/blogController");
 const protect = require("../middlewares/authMiddleware");
 
@@ -16,6 +17,7 @@ router.get("/getblogs", getBlogs);
 router.get("/getblog/:id", getBlogById);
 router.get("/getblogsbyuser/:id", getBlogByUserId);
 router.delete("/deleteblog/:id", deleteBlog);
+router.delete("/deletecomment/:id", deleteComment);
 router.put("/like/:id", protect, likeBlog);
 router.put("/comment/:id", protect, commentBlog);
 
