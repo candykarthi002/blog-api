@@ -133,6 +133,21 @@ const getUserByName = asyncHandler(async (req, res) => {
   }
 });
 
+const getUsersByName = asyncHandler(async (req, res) => {
+  const users = await BlogUser.find({
+    name: { $regex: `^${req.params.name}`, $options: "i" },
+  });
+  if (users) {
+    res.status(200).json({
+      msg: "User Found",
+      users: users,
+    });
+  } else {
+    res.status(400);
+    throw new Error("No User Found");
+  }
+});
+
 const loginStatus = asyncHandler(async (req, res) => {
   const token = await req.cookies.jwt_token;
   if (!token) {
@@ -151,5 +166,6 @@ module.exports = {
   logoutUser,
   getUser,
   getUserByName,
+  getUsersByName,
   loginStatus,
 };
