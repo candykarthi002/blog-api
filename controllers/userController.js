@@ -85,7 +85,7 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json({
       msg: "User Found",
       token: token,
-      username: user.name,
+      username: user,
     });
   } else {
     res.status(400);
