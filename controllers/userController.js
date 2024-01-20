@@ -45,7 +45,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    res.status(201).json({ msg: "User Created", token: token, user: {...user, password: ""} });
+    res.status(201).json({ msg: "User Created", token: token, user: {...user._doc, password: ""} });
   } else {
     res.status(400);
     throw new Error("Error Creating User");
@@ -85,7 +85,7 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json({
       msg: "User Found",
       token: token,
-      user: {...user, password: ""},
+      user: {...user._doc, password: ""},
     });
   } else {
     res.status(400);
